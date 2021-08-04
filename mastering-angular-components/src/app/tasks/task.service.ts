@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Task} from '../model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TaskService {
 
   private tasks: Task[] = [
@@ -12,9 +10,6 @@ export class TaskService {
     {id: 3, title: 'Task 3', done: true},
     {id: 4, title: 'Task 4', done: false}
   ];
-
-  constructor() {
-  }
 
   getTasks(): Task[] {
     return this.tasks.slice();
