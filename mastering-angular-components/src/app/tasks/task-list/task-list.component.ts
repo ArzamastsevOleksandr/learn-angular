@@ -1,4 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {TaskService} from '../task.service';
+import {Task} from 'src/app/model';
 
 @Component({
   selector: 'mac-task-list',
@@ -8,21 +10,26 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 })
 export class TaskListComponent implements OnInit {
 
-  tasks = [
-    {id: 1, title: 'Task 1', done: false},
-    {id: 2, title: 'Task 2', done: true}
-  ];
+  tasks: Task[];
 
-  constructor() {
+  constructor(private taskService: TaskService) {
+    this.tasks = taskService.getTasks();
   }
 
   ngOnInit() {
   }
 
   addTask(title: string) {
-    const maxIndex = this.tasks.map(task => task.id).reduce((a, b) => a > b ? a : b);
-    this.tasks.push({
-      id: maxIndex + 1, title, done: false
-    });
+    const task: Task = {
+      title, done: false
+    };
+    this.taskService.addTask(task);
+    this.tasks = this.taskService.getTasks();
   }
+
+  updateTask(task: Task) {
+    this.taskService.updateTask(task);
+    this.tasks = this.taskService.getTasks();
+  }
+
 }

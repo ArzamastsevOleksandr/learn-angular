@@ -1,4 +1,5 @@
-import {Component, HostBinding, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, HostBinding, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {Task} from 'src/app/model';
 
 @Component({
   selector: 'mac-task',
@@ -9,6 +10,7 @@ import {Component, HostBinding, Input, OnInit, ViewEncapsulation} from '@angular
 export class TaskComponent implements OnInit {
 
   @Input() task: any;
+  @Output() outUpdateTask = new EventEmitter<Task>();
 
   constructor() {
   }
@@ -19,6 +21,13 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  updateTask(done: boolean) {
+    this.outUpdateTask.emit({
+      ...this.task,
+      done
+    });
   }
 
 }
