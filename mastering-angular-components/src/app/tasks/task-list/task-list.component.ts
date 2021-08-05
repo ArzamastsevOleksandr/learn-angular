@@ -1,53 +1,31 @@
-import {Component, ViewEncapsulation} from '@angular/core';
-import {TaskService} from '../task.service';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angular/core';
 import {Task, TaskListFilterType} from 'src/app/model';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'mac-task-list',
   templateUrl: './task-list.component.html',
-  // styleUrls: ['./task-list.component.css']
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskListComponent {
 
-  tasks: Observable<Task[]>;
-  filteredTasks: Observable<Task[]>;
-  taskFilterTypes: TaskListFilterType[] = ['all', 'open', 'done'];
-  activeTaskFilterType = new BehaviorSubject<TaskListFilterType>('all');
-
-  constructor(private taskService: TaskService) {
-    this.tasks = taskService.getTasks();
-
-    this.filteredTasks = combineLatest(this.tasks, this.activeTaskFilterType)
-      .pipe(map(([tasks, activeTaskFilterType]) => {
-          return tasks.filter((task: Task) => {
-            if (activeTaskFilterType === 'all') {
-              return true;
-            } else if (activeTaskFilterType === 'open') {
-              return !task.done;
-            } else {
-              return task.done;
-            }
-          });
-        })
-      );
-  }
+  @Input() taskFilterTypes: TaskListFilterType[] = ['all', 'open', 'done'];
+  @Input() activeTaskFilterType: TaskListFilterType;
+  @Input() tasks: Task[];
+  @Output() outAddTask = new EventEmitter<string>();
+  @Output() outUpdateTask = new EventEmitter<Task>();
+  @Output() outActivateFilterType = new EventEmitter<TaskListFilterType>();
 
   addTask(title: string) {
-    const task: Task = {
-      title, done: false
-    };
-    this.taskService.addTask(task);
+    this.outAddTask.emit(title);
   }
 
   updateTask(task: Task) {
-    this.taskService.updateTask(task);
+    this.outUpdateTask.emit(task);
   }
 
   activateFilterType(type: TaskListFilterType) {
-    this.activeTaskFilterType.next(type);
+    this.outActivateFilterType.emit(type);
   }
 
 }
