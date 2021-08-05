@@ -1,6 +1,8 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 import {TaskService} from '../task.service';
 import {Task, TaskListFilterType} from 'src/app/model';
+import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'mac-task-list',
@@ -10,14 +12,27 @@ import {Task, TaskListFilterType} from 'src/app/model';
 })
 export class TaskListComponent {
 
-  tasks: Task[];
-  filteredTasks: Task[];
+  tasks: Observable<Task[]>;
+  filteredTasks: Observable<Task[]>;
   taskFilterTypes: TaskListFilterType[] = ['all', 'open', 'done'];
-  activeTaskFilterType: TaskListFilterType = 'all';
+  activeTaskFilterType = new BehaviorSubject<TaskListFilterType>('all');
 
   constructor(private taskService: TaskService) {
     this.tasks = taskService.getTasks();
-    this.filterTasks();
+
+    this.filteredTasks = combineLatest(this.tasks, this.activeTaskFilterType)
+      .pipe(map(([tasks, activeTaskFilterType]) => {
+          return tasks.filter((task: Task) => {
+            if (activeTaskFilterType === 'all') {
+              return true;
+            } else if (activeTaskFilterType === 'open') {
+              return !task.done;
+            } else {
+              return task.done;
+            }
+          });
+        })
+      );
   }
 
   addTask(title: string) {
@@ -25,32 +40,14 @@ export class TaskListComponent {
       title, done: false
     };
     this.taskService.addTask(task);
-    this.tasks = this.taskService.getTasks();
-    this.filterTasks();
   }
 
   updateTask(task: Task) {
     this.taskService.updateTask(task);
-    this.tasks = this.taskService.getTasks();
-    this.filterTasks();
-  }
-
-  filterTasks() {
-    this.filteredTasks = this.tasks.filter(task => {
-      switch (this.activeTaskFilterType) {
-        case 'all':
-          return true;
-        case 'open':
-          return !task.done;
-        case 'done':
-          return task.done;
-      }
-    });
   }
 
   activateFilterType(type: TaskListFilterType) {
-    this.activeTaskFilterType = type;
-    this.filterTasks();
+    this.activeTaskFilterType.next(type);
   }
 
 }
