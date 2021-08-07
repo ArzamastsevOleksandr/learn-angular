@@ -1,16 +1,20 @@
 import {InMemoryDbService} from 'angular-in-memory-web-api';
-import {Task} from './model';
+import {Project, Task} from './model';
 
 export class Database implements InMemoryDbService {
 
   createDb() {
-    const tasks: Task[] = [
-      {id: 1, title: 'Task 1', done: false},
-      {id: 2, title: 'Task 2', done: false},
-      {id: 3, title: 'Task 3', done: true},
-      {id: 4, title: 'Task 4', done: false}
+    const projects: Project[] = [
+      {id: 1, title: 'Project 1', description: 'Project 1'},
+      {id: 2, title: 'Project 2', description: 'Project 2'}
     ];
-    return {tasks};
+    const tasks: Task[] = [
+      {id: 1, projectId: 1, title: 'Task 1', done: false},
+      {id: 2, projectId: 1, title: 'Task 2', done: false},
+      {id: 3, projectId: 1, title: 'Task 3', done: true},
+      {id: 4, projectId: 1, title: 'Task 4', done: false}
+    ];
+    return {projects, tasks};
   }
 
 }
