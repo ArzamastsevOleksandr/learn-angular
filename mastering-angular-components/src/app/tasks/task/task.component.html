@@ -3,5 +3,8 @@
 </mac-checkbox>
 
 <div class="title">
-  {{task.title}}
+  <mac-editor [content]="task.title"
+              [showControls]="true"
+              (outSaveEdit)="updateTitle($event)">
+  </mac-editor>
 </div>

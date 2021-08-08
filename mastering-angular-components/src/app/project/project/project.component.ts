@@ -14,9 +14,24 @@ export class ProjectComponent {
   @Input() activeTab: Tab;
 
   @Output() outActivateTab = new EventEmitter<Tab>();
+  @Output() outUpdateProject = new EventEmitter<Project>();
 
   activateTab(tab: Tab) {
     this.outActivateTab.emit(tab);
+  }
+
+  updateTitle(title: string) {
+    this.outUpdateProject.emit({
+      ...this.project,
+      title
+    });
+  }
+
+  updateDescription(description: string) {
+    this.outUpdateProject.emit({
+      ...this.project,
+      description
+    });
   }
 
 }

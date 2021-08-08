@@ -36,4 +36,9 @@ export class ProjectService {
     return this.selectedProject;
   }
 
+  updateProject(project: Project) {
+    this.http.post(`/api/projects/${project.id}`, project)
+      .subscribe(() => this.loadProjects());
+  }
+
 }
