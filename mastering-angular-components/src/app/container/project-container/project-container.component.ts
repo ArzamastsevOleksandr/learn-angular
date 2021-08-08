@@ -27,4 +27,8 @@ export class ProjectContainerComponent {
     this.activeTab = tab;
   }
 
+  updateProject(project: Project) {
+    this.projectService.updateProject(project);
+  }
+
 }
