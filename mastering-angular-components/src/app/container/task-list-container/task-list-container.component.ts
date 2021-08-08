@@ -1,8 +1,9 @@
 import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
-import {Task, TaskListFilterType} from '../../model';
+import {Project, Task, TaskListFilterType} from '../../model';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, switchMap, take} from 'rxjs/operators';
 import {TaskService} from '../../tasks/task.service';
+import {ProjectService} from '../../project/project.service';
 
 @Component({
   selector: 'mac-task-list-container',
@@ -12,13 +13,15 @@ import {TaskService} from '../../tasks/task.service';
 })
 export class TaskListContainerComponent {
 
+  selectedProject: Observable<Project>;
   tasks: Observable<Task[]>;
   filteredTasks: Observable<Task[]>;
   taskFilterTypes: TaskListFilterType[] = ['all', 'open', 'done'];
   activeTaskFilterType = new BehaviorSubject<TaskListFilterType>('all');
 
-  constructor(private taskService: TaskService) {
-    this.tasks = this.taskService.getTasks();
+  constructor(private taskService: TaskService, private projectService: ProjectService) {
+    this.selectedProject = this.projectService.getSelectedProject();
+    this.tasks = this.selectedProject.pipe(switchMap(project => this.taskService.getProjectTasks(project.id)));
 
     this.filteredTasks = combineLatest(this.tasks, this.activeTaskFilterType)
       .pipe(map(([tasks, activeTaskFilterType]) => {
@@ -40,10 +43,13 @@ export class TaskListContainerComponent {
   }
 
   addTask(title: string) {
-    const task: Task = {
-      title, done: false
-    };
-    this.taskService.addTask(task);
+    this.selectedProject.pipe(take(1))
+      .subscribe(project => {
+        const task: Task = {
+          projectId: project.id, title, done: false
+        };
+        this.taskService.addTask(task);
+      });
   }
 
   updateTask(task: Task) {
