@@ -24,6 +24,10 @@ export class ProjectService {
       .subscribe(response => this.projects.next(response));
   }
 
+  getProjects(): Observable<Project[]> {
+    return this.projects.asObservable();
+  }
+
   selectProject(id: number) {
     this.selectedProjectId.next(id);
   }

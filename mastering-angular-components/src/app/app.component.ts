@@ -1,4 +1,7 @@
 import {Component, ViewEncapsulation} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Project} from './model';
+import {ProjectService} from './project/project.service';
 
 @Component({
   selector: 'mac-root',
@@ -7,5 +10,17 @@ import {Component, ViewEncapsulation} from '@angular/core';
   encapsulation: ViewEncapsulation.None // enable global styles
 })
 export class AppComponent {
-  title = 'mastering-angular-components';
+
+  projects: Observable<Project[]>;
+  selectedProject: Observable<Project>;
+
+  constructor(private projectService: ProjectService) {
+    this.projects = this.projectService.getProjects();
+    this.selectedProject = this.projectService.getSelectedProject();
+  }
+
+  selectProject(id: number) {
+    this.projectService.selectProject(id);
+  }
+
 }
