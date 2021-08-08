@@ -12,7 +12,10 @@ import {ToggleComponent} from './ui/toggle/toggle.component';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {Database} from './database';
-import { TaskListContainerComponent } from './container/task-list-container/task-list-container.component';
+import {TaskListContainerComponent} from './container/task-list-container/task-list-container.component';
+import {ProjectComponent} from './project/project/project.component';
+import {ProjectContainerComponent} from './container/project-container/project-container.component';
+import {ProjectService} from './project/project.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,9 @@ import { TaskListContainerComponent } from './container/task-list-container/task
     EnterTaskComponent,
     CheckboxComponent,
     ToggleComponent,
-    TaskListContainerComponent
+    TaskListContainerComponent,
+    ProjectComponent,
+    ProjectContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +37,7 @@ import { TaskListContainerComponent } from './container/task-list-container/task
       delay: 0
     })
   ],
-  providers: [TaskService],
+  providers: [TaskService, ProjectService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
