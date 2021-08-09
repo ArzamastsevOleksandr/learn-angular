@@ -8,8 +8,8 @@ export class Database implements InMemoryDbService {
       {id: 1, name: 'You', pictureUrl: '/assets/user.svg'}
     ];
     const projects: Project[] = [
-      {id: 1, title: 'Project 1', description: 'Project 1'},
-      {id: 2, title: 'Project 2', description: 'Project 2'}
+      {id: 1, title: 'Project 1', description: 'Project 1', comments: []},
+      {id: 2, title: 'Project 2', description: 'Project 2', comments: []}
     ];
     const tasks: Task[] = [
       {id: 1, projectId: 1, title: 'Task 1', done: false},
