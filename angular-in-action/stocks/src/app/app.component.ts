@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {StockInterface} from './model/StockInterface';
+import {StocksService} from './service/stocks/stocks.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'stocks';
+
+  stocks: Array<StockInterface>;
+
+  constructor(private stocksService: StocksService) {
+    stocksService.load(['AAPL'])
+      .subscribe(stocks => {
+        this.stocks = stocks;
+      });
+  }
+
 }
