@@ -1,22 +1,41 @@
 <div class="container mt-2">
   <div class="card card-body">
     <nav class="navbar navbar-dark mb-1">
-<!--      TODO: does not work. Implement custom -->
+      <!--      TODO: does not work. Implement custom -->
       <h1 class="navbar-brand mb-0">Overall Metrics</h1>
     </nav>
     <div class="row">
       <app-metric class="col-sm-6"
-        title="CPU"
-        [description]="'utilization of CPU cores'"
-        [used]="cpu.used"
-        [max]="cpu.available">
+                  title="CPU"
+                  [description]="'utilization of CPU cores'"
+                  [used]="cpu.used"
+                  [max]="cpu.available">
       </app-metric>
       <app-metric class="col-sm-6"
-        title="Memory"
-        [description]="'utilization of memory in GB'"
-        [used]="mem.used"
-        [max]="mem.available">
+                  title="Memory"
+                  [description]="'utilization of memory in GB'"
+                  [used]="mem.used"
+                  [max]="mem.available">
       </app-metric>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-2">
+  <div class="card card-block">
+    <div class="card-body">
+      <nav class="navbar navbar-dark bg-dark">
+        <h1 class="navbar-brand mb-0">Cluster 1</h1>
+      </nav>
+      <table app-nodes class="table  table-hover">
+        <tr app-node-row *ngFor="let node of cluster1" [node]="node"></tr>
+      </table>
+      <nav class="navbar navbar-dark bg-dark">
+        <h1 class="navbar-brand mb-0">Cluster 2</h1>
+      </nav>
+      <table app-nodes class="table table-hover">
+        <tr app-node-row *ngFor="let node of cluster2" [node]="node"></tr>
+      </table>
     </div>
   </div>
 </div>
