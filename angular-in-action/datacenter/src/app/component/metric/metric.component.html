@@ -1,0 +1,15 @@
+<div class="card card-body">
+  <nav class="navbar navbar-dark bg-primary mb-1" [ngClass]="{'bg-danger': isDanger(), 'bg-success': !isDanger()}">
+    <h1 class="navbar-brand mb-0">{{title}}</h1>
+  </nav>
+  <h4 class="card-title">{{used}}/{{max}} ({{used / max | percent: '1.0-2'}})</h4>
+  <p class="card-text">{{description}}</p>
+<!--  TODO: does not work, make your own progress bar component-->
+  <div class="progress">
+    <div class="progress-bar-striped"
+         role="progressbar"
+         [attr.aria-valuenow]="used"
+         [attr.aria-valuemax]="max"
+         [attr.aria-valuemin]="0" style="background-color: red"></div>
+  </div>
+</div>
