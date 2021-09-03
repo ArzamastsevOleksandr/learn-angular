@@ -16,7 +16,6 @@ export class AppComponent {
   openTasksCount: Observable<number>;
   user: Observable<User>;
   projects: Observable<Project[]>;
-  selectedProject: Observable<Project>;
 
   constructor(private projectService: ProjectService,
               private taskService: TaskService,
@@ -26,12 +25,7 @@ export class AppComponent {
       .pipe(map(tasks => tasks.filter(task => !task.done).length));
 
     this.projects = this.projectService.getProjects();
-    this.selectedProject = this.projectService.getSelectedProject();
     this.user = this.userService.getCurrentUser();
-  }
-
-  selectProject(id: number) {
-    this.projectService.selectProject(id);
   }
 
 }
